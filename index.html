@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess & Reveal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section id="joinScreen" class="screen card">
+      <div class="logo">🎯</div>
+      <h1>Guess & Reveal</h1>
+      <p class="subtitle">One question. Hidden answers. One big reveal.</p>
+      <input id="nameInput" maxlength="20" placeholder="Your name" autocomplete="off" />
+      <button id="joinBtn" class="primary">Join Game</button>
+      <p id="joinError" class="error"></p>
+      <p class="small">Up to 10 players • No login • No room code</p>
+    </section>
+
+    <section id="gameScreen" class="screen hidden">
+      <header class="topbar">
+        <div>
+          <div class="brand">🎯 Guess & Reveal</div>
+          <div id="roundLabel" class="small"></div>
+        </div>
+        <div class="playersBadge">👥 <span id="playerCount">0</span>/10</div>
+      </header>
+
+      <div id="lobby" class="card"></div>
+
+      <div id="game" class="hidden">
+        <div class="card questionCard">
+          <div class="eyebrow">QUESTION</div>
+          <h2 id="question"></h2>
+        </div>
+
+        <div id="hostPanel" class="card hidden">
+          <div class="eyebrow">YOU ARE THE COMMENTER</div>
+          <p class="hint">Write your answer. Nobody else can see it until you reveal it.</p>
+          <div class="row">
+            <input id="answerInput" maxlength="120" placeholder="Type the answer..." autocomplete="off" />
+            <button id="setAnswerBtn" class="primary">Lock Answer</button>
+          </div>
+          <div id="revealArea" class="hidden">
+            <div class="hiddenAnswer">🔒 Answer locked</div>
+            <button id="revealBtn" class="reveal">SHOW ANSWER</button>
+          </div>
+        </div>
+
+        <div id="guessPanel" class="card hidden">
+          <div class="eyebrow">GUESS</div>
+          <p id="guessHint" class="hint"></p>
+          <div class="row">
+            <input id="guessInput" maxlength="120" placeholder="Your guess..." autocomplete="off" />
+            <button id="guessBtn" class="primary">Submit Guess</button>
+          </div>
+          <div id="guessStatus" class="status"></div>
+        </div>
+
+        <div id="waitingPanel" class="card hidden">
+          <div class="loader">⏳</div>
+          <h3>Waiting for everyone...</h3>
+          <p class="hint">The answer is hidden. Keep guessing in your head!</p>
+        </div>
+
+        <div id="revealPanel" class="card revealCard hidden">
+          <div class="eyebrow">THE ANSWER IS...</div>
+          <div id="answerText" class="answerText"></div>
+          <div id="scoreMessage" class="scoreMessage"></div>
+          <button id="nextBtn" class="primary hidden">NEXT ROUND →</button>
+        </div>
+
+        <div class="card">
+          <div class="sectionTitle">Leaderboard</div>
+          <div id="leaderboard"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
