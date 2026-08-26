@@ -20,12 +20,13 @@ $("nextBtn").onclick = () => socket.emit("nextRound");
 
 function join() {
   const name = $("nameInput").value.trim();
+  const roomCode = $("roomCodeInput").value.trim();
   if (!name) {
     $("joinError").textContent = "Enter your name first.";
     return;
   }
   me = { name };
-  socket.emit("join", { name });
+  socket.emit("join", { name, roomCode });
 }
 
 socket.on("errorMessage", msg => {
