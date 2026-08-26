@@ -10,7 +10,7 @@ const io = new Server(server);
 app.use(express.static(__dirname));
 
 const MAX_PLAYERS = 10;
-
+const ROOM_CODE = "8995";
 let players = new Map();
 let round = {
   number: 0,
@@ -67,7 +67,10 @@ function newRound(question) {
 }
 
 io.on("connection", socket => {
-  socket.on("join", ({ name }) => {
+  socket.on("join", ({ name, roomCode }) => {
+    if (String(roomCode || "").trim() !== ROOM_CODE) {
+  return socket.emit("errorMessage", "Wrong room code.");
+}
     const cleanName = String(name || "").trim().slice(0, 20);
     if (!cleanName) return socket.emit("errorMessage", "Please enter your name.");
     if (players.size >= MAX_PLAYERS) {
