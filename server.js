@@ -30,7 +30,7 @@ function publicState() {
     players: [...players.values()].map(p => ({
       id: p.id,
       name: p.name,
-      wins: p.wins,
+      wins: p.wins || 0,
       guessed: round.guesses.has(p.id),
       guess: round.revealed ? (round.guesses.get(p.id) || "") : null
     })),
