@@ -123,27 +123,21 @@ players.set(socket.id, { id: socket.id, name: cleanName, wins: 0 });
   });
 
 socket.on("reveal", () => {
+  if (socket.id !== round.hostId || round.phase !== "guessing") return;
 
-if (socket.id !== round.hostId || round.phase !== "guessing" || !round.answer) return;
-round.winners = new Set();
-round.winnersChosen = false;
-const otherPlayers = [...players.keys()].filter(id => id !== round.hostId);
+  const otherPlayers = [...players.keys()].filter(id => id !== round.hostId);
 
-const everyoneGuessed =
-otherPlayers.length > 0 &&
-otherPlayers.every(id => round.guesses.has(id));
+  const allGuessed =
+    otherPlayers.length > 0 &&
+    otherPlayers.every(id => round.guesses.has(id));
 
-if (!everyoneGuessed) return;
+  if (!allGuessed) return;
 
-round.revealed = true;
-round.phase = "revealed";
+  round.revealed = true;
+  round.phase = "revealed";
 
-
-  
-
-broadcast();
-
-});  
+  broadcast();
+});
 
 socket.on("nextRound", () => {
 
