@@ -13,7 +13,14 @@ $("setAnswerBtn").onclick = () => {
 $("answerInput").addEventListener("keydown", e => {
   if (e.key === "Enter") $("setAnswerBtn").click();
 });
-$("revealBtn").onclick = () => socket.emit("reveal");
+$("revealBtn").onclick = () => {
+  const others = state.players.filter(p => p.id !== state.hostId);
+  const allGuessed = others.length > 0 && others.every(p => p.guessed);
+
+  if (!allGuessed) return;
+
+  socket.emit("reveal");
+};
 $("guessBtn").onclick = submitGuess;
 $("guessInput").addEventListener("keydown", e => { if (e.key === "Enter") submitGuess(); });
 $("nextBtn").onclick = () => socket.emit("nextRound");
