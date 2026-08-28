@@ -115,31 +115,52 @@ io.on("connection", socket => {
     broadcast();
   });
 
-  socket.on("reveal", () => {
-    if (socket.id !== round.hostId || round.phase !== "guessing" || !round.answer) return;
+socket.on("reveal", () => {
 
-    round.revealed = true;
-    round.phase = "revealed";
+if (socket.id !== round.hostId || round.phase !== "guessing" || !round.answer) return;
 
-    const normalizedAnswer = round.answer.toLowerCase().trim();
+const otherPlayers = [...players.keys()].filter(id => id !== round.hostId);
 
-    for (const [id, guess] of round.guesses.entries()) {
-      const normalizedGuess = guess.toLowerCase().trim();
-      const player = players.get(id);
-      if (!player) continue;
+const everyoneGuessed =
+otherPlayers.length > 0 &&
+otherPlayers.every(id => round.guesses.has(id));
 
-      if (normalizedGuess === normalizedAnswer) {
-        player.score += 100;
-      } else if (
-        normalizedGuess.includes(normalizedAnswer) ||
-        normalizedAnswer.includes(normalizedGuess)
-      ) {
-        player.score += 50;
-      }
-    }
+if (!everyoneGuessed) return;
 
-    broadcast();
-  });
+round.revealed = true;
+round.phase = "revealed";
+
+const normalizedAnswer = round.answer.toLowerCase().trim();
+
+for (const [id, guess] of round.guesses.entries()) {
+
+const normalizedGuess = guess.toLowerCase().trim();
+
+const player = players.get(id);
+
+if (!player) continue;
+
+if (normalizedGuess === normalizedAnswer) {
+
+player.score += 100;
+
+} else if (
+
+normalizedGuess.includes(normalizedAnswer) ||
+
+normalizedAnswer.includes(normalizedGuess)
+
+) {
+
+player.score += 50;
+
+}
+
+}
+
+broadcast();
+
+});  
 
 socket.on("nextRound", () => {
 
