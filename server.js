@@ -27,18 +27,23 @@ let round = {
 
 function publicState() {
   return {
-    phase: round.phase,
-    number: round.number,
-    question: round.question,
-    answer: round.revealed ? round.answer : null,
-    revealed: round.revealed,
-    hostId: round.hostId,
     players: [...players.values()].map(p => ({
       id: p.id,
       name: p.name,
       score: p.score,
-      guessed: round.guesses.has(p.id)
-    }))
+      guessed: round.guesses.has(p.id),
+      guess: round.revealed ? (round.guesses.get(p.id) || "") : null
+    })),
+
+    number: round.number,
+    hostId: round.hostId,
+    question: round.question,
+    answer: round.revealed ? round.answer : null,
+    guesses: round.revealed
+      ? Object.fromEntries(round.guesses)
+      : {},
+    revealed: round.revealed,
+    phase: round.phase
   };
 }
 
