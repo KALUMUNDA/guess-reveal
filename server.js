@@ -12,6 +12,7 @@ app.use(express.static(__dirname));
 const MAX_PLAYERS = 10;
 const ROOM_CODE = "8995";
 let players = new Map();
+
 let round = {
   number: 0,
   hostId: null,
@@ -19,6 +20,8 @@ let round = {
   answer: null,
   guesses: new Map(),
   revealed: false,
+  winners: new Set(),
+  winnersChosen: false,
   phase: "lobby"
 };
 
