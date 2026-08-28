@@ -29,7 +29,17 @@ $("revealBtn").onclick = () => {
 $("guessBtn").onclick = submitGuess;
 $("guessInput").addEventListener("keydown", e => { if (e.key === "Enter") submitGuess(); });
 $("nextBtn").onclick = () => socket.emit("nextRound");
+$("submitWinnersBtn").onclick = () => {
+  const winners = [...document.querySelectorAll("#winnerList input:checked")]
+    .map(input => input.value);
 
+  if (winners.length === 0) {
+    toast("Choose at least one winner.");
+    return;
+  }
+
+  socket.emit("submitWinners", winners);
+};
 function join() {
   const name = $("nameInput").value.trim();
   const roomCode = $("roomCodeInput").value.trim();
