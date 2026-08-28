@@ -138,7 +138,26 @@ socket.on("reveal", () => {
 
   broadcast();
 });
+socket.on("submitWinners", (winnerIds) => {
+  if (socket.id !== round.hostId || round.phase !== "revealed") return;
 
+  if (!Array.isArray(winnerIds)) return;
+
+  round.winners = new Set(
+    winnerIds.filter(id => players.has(id) && id !== round.hostId)
+  );
+
+  round.winners.forEach(id => {
+    const player = players.get(id);
+    if (player) {
+      player.wins = (player.wins || 0) + 1;
+    }
+  });
+
+  round.winnersChosen = true;
+
+  broadcast();
+});
 socket.on("nextRound", () => {
 
   if (socket.id !== round.hostId || round.phase !== "revealed") return;
