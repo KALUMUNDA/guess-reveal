@@ -14,10 +14,15 @@ $("answerInput").addEventListener("keydown", e => {
   if (e.key === "Enter") $("setAnswerBtn").click();
 });
 $("revealBtn").onclick = () => {
-  const others = state.players.filter(p => p.id !== state.hostId);
-  const allGuessed = others.length > 0 && others.every(p => p.guessed);
+  const otherPlayers = state.players.filter(p => p.id !== state.hostId);
+  const allGuessed =
+    otherPlayers.length > 0 &&
+    otherPlayers.every(p => p.guessed);
 
-  if (!allGuessed) return;
+  if (!allGuessed) {
+    toast("Wait for everyone to submit their guess.");
+    return;
+  }
 
   socket.emit("reveal");
 };
@@ -101,7 +106,13 @@ $("setAnswerBtn").disabled = state.phase !== "answering";
 $("answerInput").disabled = state.phase !== "answering";
 
 $("revealArea").classList.toggle("hidden", state.phase === "answering");
+const otherPlayers = state.players.filter(p => p.id !== state.hostId);
+const allGuessed =
+  otherPlayers.length > 0 &&
+  otherPlayers.every(p => p.guessed);
 
+$("revealBtn").disabled =
+  !amHost || state.phase !== "guessing" || !allGuessed;
 if (state.phase !== "answering") $("answerInput").value = "";
 
 if (state.phase === "guessing") {
