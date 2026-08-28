@@ -58,7 +58,7 @@ function newRound(question) {
   if (players.size === 0) return;
   const cleanQuestion = String(question || "").trim().slice(0, 180);
   if (!cleanQuestion) return;
-  round.number += 1;
+ 
   round.question = cleanQuestion;
   round.answer = null;
   round.guesses = new Map();
