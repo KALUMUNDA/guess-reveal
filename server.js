@@ -141,11 +141,19 @@ io.on("connection", socket => {
     broadcast();
   });
 
-  socket.on("nextRound", ({ question }) => {
-    if (socket.id !== round.hostId || round.phase !== "revealed") return;
-    chooseNextHost();
-    newRound(question);
-  });
+ socket.on("nextRound", () => {
+  if (socket.id !== round.hostId || round.phase !== "revealed") return;
+
+  chooseNextHost();
+
+  round.question = null;
+  round.answer = null;
+  round.guesses = new Map();
+  round.revealed = false;
+  round.phase = "lobby";
+
+  broadcast();
+});
 
   socket.on("disconnect", () => {
     players.delete(socket.id);
