@@ -169,7 +169,20 @@ $("waitingPanel").classList.add("hidden");
       $("scoreMessage").textContent = "Answer revealed! Points have been awarded.";
     }
   }
+const statusBox = $("guessStatusItems");
 
+if (statusBox && state.players) {
+  statusBox.innerHTML = state.players.map(player => {
+    const hasGuessed = state.guesses && state.guesses[player.id];
+
+    return `
+      <div class="guess-status-row">
+        <span>${player.name}</span>
+        <span>${hasGuessed ? "✅ Submitted" : "⏳ Waiting"}</span>
+      </div>
+    `;
+  }).join("");
+}
   renderLeaderboard();
 }
 
