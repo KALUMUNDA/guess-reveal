@@ -105,17 +105,15 @@ function render() {
   if (state.revealed) {
     $("answerText").textContent = state.answer;
     if (amHost) {
-      $("nextBtn").classList.remove("hidden");
-      $("nextBtn").textContent = "NEXT ROUND →";
-      $("nextBtn").onclick = () => {
-        const question = prompt("Write the next question:");
-        if (question && question.trim()) {
-          socket.emit("nextRound", { question: question.trim() });
-        }
-      };
-    } else {
-      $("nextBtn").classList.add("hidden");
-    }
+    $("nextBtn").classList.remove("hidden");
+    $("nextBtn").textContent = "NEXT ROUND →";
+
+    $("nextBtn").onclick = () => {
+        socket.emit("nextRound");
+    };
+} else {
+    $("nextBtn").classList.add("hidden");
+}
 
     if (!amHost) {
       const myGuess = meData?.guessed;
