@@ -50,7 +50,7 @@ function render() {
   const amHost = state.hostId === socket.id;
   const meData = state.players.find(p => p.id === socket.id);
 
-  if (state.phase === "lobby") {
+if (state.phase === "lobby" || state.phase === "questioning") {
     $("game").classList.add("hidden");
     $("lobby").classList.remove("hidden");
     $("lobby").innerHTML = `
