@@ -137,33 +137,8 @@ if (!everyoneGuessed) return;
 round.revealed = true;
 round.phase = "revealed";
 
-const normalizedAnswer = round.answer.toLowerCase().trim();
 
-for (const [id, guess] of round.guesses.entries()) {
-
-const normalizedGuess = guess.toLowerCase().trim();
-
-const player = players.get(id);
-
-if (!player) continue;
-
-if (normalizedGuess === normalizedAnswer) {
-
-player.score += 100;
-
-} else if (
-
-normalizedGuess.includes(normalizedAnswer) ||
-
-normalizedAnswer.includes(normalizedGuess)
-
-) {
-
-player.score += 50;
-
-}
-
-}
+  
 
 broadcast();
 
