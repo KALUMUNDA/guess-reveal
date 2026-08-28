@@ -125,7 +125,8 @@ players.set(socket.id, { id: socket.id, name: cleanName, wins: 0 });
 socket.on("reveal", () => {
 
 if (socket.id !== round.hostId || round.phase !== "guessing" || !round.answer) return;
-
+round.winners = new Set();
+round.winnersChosen = false;
 const otherPlayers = [...players.keys()].filter(id => id !== round.hostId);
 
 const everyoneGuessed =
