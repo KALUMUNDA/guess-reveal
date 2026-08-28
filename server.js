@@ -40,9 +40,10 @@ function publicState() {
 }
 
 function broadcast() {
-  io.emit("state", publicState());
+  for (const id of players.keys()) {
+    io.to(id).emit("state", publicState());
+  }
 }
-
 function chooseNextHost() {
   const ids = [...players.keys()];
   if (!ids.length) {
