@@ -168,6 +168,21 @@ $("waitingPanel").classList.add("hidden");
   if (state.revealed) {
     $("answerText").textContent = state.answer;
     if (amHost) {
+  $("winnerArea").classList.remove("hidden");
+
+  $("winnerList").innerHTML = state.players
+    .filter(p => p.id !== state.hostId)
+    .map(p => `
+      <label class="winner-player">
+        <input type="checkbox" value="${p.id}">
+        <span>${p.name}</span>
+        <span>${p.guess || ""}</span>
+      </label>
+    `).join("");
+} else {
+  $("winnerArea").classList.add("hidden");
+}
+    if (amHost) {
     $("nextBtn").classList.remove("hidden");
     $("nextBtn").textContent = "NEXT ROUND →";
 
