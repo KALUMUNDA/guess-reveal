@@ -88,12 +88,57 @@ if (state.phase === "lobby" || state.phase === "questioning") {
   $("waitingPanel").classList.toggle("hidden", !amHost || state.phase !== "guessing");
   $("revealPanel").classList.toggle("hidden", !state.revealed);
 
-  if (amHost) {
-    $("setAnswerBtn").disabled = state.phase !== "answering";
-    $("answerInput").disabled = state.phase !== "answering";
-    $("revealArea").classList.toggle("hidden", state.phase === "answering");
-    if (state.phase !== "answering") $("answerInput").value = "";
-  }
+if (amHost) {
+
+$("setAnswerBtn").disabled = state.phase !== "answering";
+$("answerInput").disabled = state.phase !== "answering";
+
+$("revealArea").classList.toggle("hidden", state.phase === "answering");
+
+if (state.phase !== "answering") $("answerInput").value = "";
+
+if (state.phase === "guessing") {
+
+const playersWhoGuess = state.players.filter(p => p.id !== socket.id);
+
+const submitted = playersWhoGuess.filter(p => p.guessed).length;
+const total = playersWhoGuess.length;
+
+$("waitingPanel").classList.remove("hidden");
+
+$("waitingPanel").innerHTML = `
+<div class="loader">⏳</div>
+
+<h3>
+${submitted === total ? "Everyone has submitted!" : "Waiting for everyone..."}
+</h3>
+
+<div class="guessList">
+
+${playersWhoGuess.map(p => `
+<div class="guessPlayer">
+<span>${escapeHtml(p.name)}</span>
+<span>${p.guessed ? "✅ Submitted" : "⏳ Waiting"}</span>
+</div>
+`).join("")}
+
+</div>
+
+<p class="hint">
+${submitted}/${total} players have submitted their guess.
+</p>
+`;
+
+$("revealBtn").disabled = submitted !== total;
+
+} else {
+
+$("waitingPanel").classList.add("hidden");
+
+}
+
+}
+  
 
   if (!amHost && state.phase === "guessing") {
     const guessed = state.guesses?.[socket.id] || meData?.guessed;
