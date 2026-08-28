@@ -85,9 +85,8 @@ io.on("connection", socket => {
     if (players.size >= MAX_PLAYERS) {
       return socket.emit("errorMessage", "The game is full (10 players maximum).");
     }
-
-    players.set(socket.id, { id: socket.id, name: cleanName, score: 0 });
-
+players.set(socket.id, { id: socket.id, name: cleanName, wins: 0 });
+   
     if (!round.hostId) round.hostId = socket.id;
 
     if (round.phase === "lobby" && players.size === 1) {
