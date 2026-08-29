@@ -234,9 +234,9 @@ if (state.revealed) {
       socket.emit("submitWinnerChoice", { winnerIds });
     };
   }
-}
-  }
-}
+
+  
+
 function submitGuess() {
   if (!state || state.phase !== "guessing") return;
   const guess = $("guessInput").value.trim();
