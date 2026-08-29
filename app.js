@@ -174,33 +174,57 @@ $("waitingPanel").classList.add("hidden");
     $("guessInput").disabled = !!guessed;
     $("guessStatus").textContent = guessed ? "✓ Guess submitted. Waiting for the reveal..." : "";
   }
+if (state.revealed) {
+  $("#answerText").textContent = state.answer || "";
 
-  if (state.revealed) {
-  $("#answerText").textContent = state.answer;
-
-  const guessList = state.players
-    .filter(p => p.id !== state.hostId)
-    .map(p => {
-      const guess = p.guess || "No answer";
-
-      return `
-        <div class="guessResult">
-          <strong>${escapeHtml(p.name)}</strong>
-          <span>${escapeHtml(guess)}</span>
-        </div>
-      `;
-    })
-    .join("");
+  const guestPlayers = state.players.filter(
+    p => p.id !== state.hostId
+  );
 
   $("#scoreMessage").innerHTML = `
-    <div class="allGuesses">
+    <div class="guessResults">
       <h3>Everyone's Answers</h3>
-      ${guessList}
+      ${guestPlayers.map(p => `
+        <div class="guessResultRow">
+          <strong>${escapeHtml(p.name)}</strong>
+          <span>${escapeHtml(p.guess || "No answer")}</span>
+        </div>
+      `).join("")}
     </div>
   `;
 
   if (isHost) {
-    $("#nextBtn").classList.remove("hidden");
+    $("#winnerChoiceArea").classList.remove("hidden");
+
+    $("#winnerChoiceArea").innerHTML = `
+      <div class="card">
+        <div class="sectionTitle">WHO GOT IT RIGHT?</div>
+        <p class="hint">Select everyone who gave the correct answer.</p>
+
+        <div class="winnerList">
+          ${guestPlayers.map(p => `
+            <label class="winnerOption">
+              <input type="checkbox" value="${p.id}">
+              <span>${escapeHtml(p.name)}</span>
+            </label>
+          `).join("")}
+        </div>
+
+        <button id="submitWinnersBtn" class="primary">
+          SUBMIT WINNERS
+        </button>
+      </div>
+    `;
+
+    $("#submitWinnersBtn").onclick = () => {
+      const winnerIds = [...document.querySelectorAll(
+        "#winnerChoiceArea input:checked"
+      )].map(input => input.value);
+
+      socket.emit("submitWinnerChoice", { winnerIds });
+    };
+  }
+}
   }
 }
 function submitGuess() {
