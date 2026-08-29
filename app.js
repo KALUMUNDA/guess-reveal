@@ -175,7 +175,17 @@ $("waitingPanel").classList.add("hidden");
     $("guessStatus").textContent = guessed ? "✓ Guess submitted. Waiting for the reveal..." : "";
   }
 if (state.revealed) {
-  $("#answerText").textContent = state.answer || "";
+ $("answerText").innerHTML = `
+  <div class="answerText">${escapeHtml(state.answer)}</div>
+  <div class="guessResults">
+    ${state.players.map(p => `
+      <div class="guessResult">
+        <span>${escapeHtml(p.name)}</span>
+        <span>${escapeHtml(p.guess || "No answer")}</span>
+      </div>
+    `).join("")}
+  </div>
+`;
 
   const guestPlayers = state.players.filter(
     p => p.id !== state.hostId
