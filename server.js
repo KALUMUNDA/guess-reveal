@@ -89,7 +89,7 @@ players.set(socket.id, {
   id: socket.id,
   name: cleanName,
   score: 0,
-  wins: 0
+  wins: 0,
 });
     if (!round.hostId) round.hostId = socket.id;
 
