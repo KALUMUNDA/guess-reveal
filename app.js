@@ -181,9 +181,7 @@ $("waitingPanel").classList.add("hidden");
   const guessList = state.players
     .filter(p => p.id !== state.hostId)
     .map(p => {
-      const guess = state.guesses && state.guesses[p.id]
-        ? state.guesses[p.id]
-        : "No answer";
+      const guess = p.guess || "No answer";
 
       return `
         <div class="guessResult">
