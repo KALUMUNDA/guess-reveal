@@ -212,18 +212,24 @@ function submitGuess() {
 }
 
 function renderLeaderboard() {
-  const sorted = [...state.players].sort((a, b) => b.wins - a.wins);
+  const sorted = [...state.players].sort(
+    (a, b) => (b.wins || 0) - (a.wins || 0)
+  );
 
-  $("#leaderboard").innerHTML = sorted.map((p, i) =>
-    `<div class="playerRow">
+  $("#leaderboard").innerHTML = sorted.map((p, i) => `
+    <div class="playerRow">
       <div class="rank">${i + 1}</div>
+
       <div class="playerName">
         ${escapeHtml(p.name)}
         ${p.id === socket.id ? "<span class='small'>(you)</span>" : ""}
       </div>
-      <div class="playerScore">${p.wins || 0} Wins</div>
-    </div>`
-  ).join("");
+
+      <div class="playerScore">
+        ${p.wins || 0} Wins
+      </div>
+    </div>
+  `).join("");
 }
 
 function escapeHtml(value) {
