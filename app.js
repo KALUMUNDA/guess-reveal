@@ -176,59 +176,35 @@ $("waitingPanel").classList.add("hidden");
   }
 
   if (state.revealed) {
-    $("answerText").textContent = state.answer;
-    if (amHost) {
-  $("winnerArea").classList.remove("hidden");
+  $("#answerText").textContent = state.answer;
 
-  $("winnerList").innerHTML = state.players
+  const guessList = state.players
     .filter(p => p.id !== state.hostId)
-    .map(p => `
-      <label class="winner-player">
-        <input type="checkbox" value="${p.id}">
-        <span>${p.name}</span>
-        <span>${p.guess || ""}</span>
-      </label>
-    `).join("");
-} else {
-  $("winnerArea").classList.add("hidden");
-}
-    if (amHost) {
-    $("nextBtn").classList.remove("hidden");
-    $("nextBtn").textContent = "NEXT ROUND →";
+    .map(p => {
+      const guess = state.guesses && state.guesses[p.id]
+        ? state.guesses[p.id]
+        : "No answer";
 
-    $("nextBtn").onclick = () => {
-        socket.emit("nextRound");
-    };
-} else {
-    $("nextBtn").classList.add("hidden");
-}
+      return `
+        <div class="guessResult">
+          <strong>${escapeHtml(p.name)}</strong>
+          <span>${escapeHtml(guess)}</span>
+        </div>
+      `;
+    })
+    .join("");
 
-    if (!amHost) {
-      const myGuess = meData?.guessed;
-      $("scoreMessage").textContent = myGuess
-        ? "Your guess has been scored. Check the leaderboard!"
-        : "Round revealed!";
-    } else {
-      $("scoreMessage").textContent = "Answer revealed! Points have been awarded.";
-    }
+  $("#scoreMessage").innerHTML = `
+    <div class="allGuesses">
+      <h3>Everyone's Answers</h3>
+      ${guessList}
+    </div>
+  `;
+
+  if (isHost) {
+    $("#nextBtn").classList.remove("hidden");
   }
-const statusBox = $("guessStatusItems");
-
-if (statusBox && state.players) {
-  statusBox.innerHTML = state.players.map(player => {
-    const hasGuessed = state.guesses && state.guesses[player.id];
-
-    return `
-      <div class="guess-status-row">
-        <span>${player.name}</span>
-        <span>${hasGuessed ? "✅ Submitted" : "⏳ Waiting"}</span>
-      </div>
-    `;
-  }).join("");
 }
-  renderLeaderboard();
-}
-
 function submitGuess() {
   if (!state || state.phase !== "guessing") return;
   const guess = $("guessInput").value.trim();
