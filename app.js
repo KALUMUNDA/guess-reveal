@@ -259,7 +259,7 @@ function renderLeaderboard() {
     </div>
   `).join("");
 }
-      </div>
+
 
       <div class="playerScore">
         ${p.wins || 0} Wins
