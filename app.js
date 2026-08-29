@@ -261,13 +261,6 @@ function renderLeaderboard() {
 }
 
 
-      <div class="playerScore">
-        ${p.wins || 0} Wins
-      </div>
-    </div>
-  `).join("");
-}
-
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, c => ({
     "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
